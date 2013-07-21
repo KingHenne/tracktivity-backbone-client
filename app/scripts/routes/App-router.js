@@ -3,8 +3,10 @@
 define([
 	'jquery',
 	'backbone',
-	'views/Navigation-view'
-], function ($, Backbone, NavigationView) {
+	'views/Navigation-view',
+	'views/Activity-view',
+	'models/Activity-model'
+], function ($, Backbone, NavigationView, ActivityView, Activity) {
 	'use strict';
 
 	var AppRouter = Backbone.Router.extend({
@@ -18,6 +20,10 @@ define([
 			this.navigationView = new NavigationView({
 				el: '#navigation',
 				users: options.users
+			});
+			this.activityView = new ActivityView({
+				el: '#activityDetail',
+				model: new Activity()
 			});
 		},
 
@@ -35,7 +41,7 @@ define([
 
 		userActivity: function(username, activityId) {
 			var activity = this.navigationView.selectActivity(activityId);
-			console.warn('TODO: Display activity %s in a detail view.', activity.get('id'));
+			this.activityView.model.set(activity.attributes);
 		}
 	});
 
