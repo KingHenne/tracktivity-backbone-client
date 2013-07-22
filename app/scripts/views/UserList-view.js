@@ -17,13 +17,13 @@ define([
 		},
 
 		render: function() {
-			this.collection.each(function(user) {
-				var entry = new UserListEntry({
-					model: user
-				});
-				this.$el.append(entry.render().el);
-			}, this);
+			this.collection.each(this.renderUserEntry, this);
 			return this;
+		},
+
+		renderUserEntry: function(user) {
+			var entry = new UserListEntry({model: user});
+			this.$el.append(entry.render().el);
 		},
 
 		onUserSelectedChange: function(user, value) {

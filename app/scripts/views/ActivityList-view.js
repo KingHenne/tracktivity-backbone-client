@@ -22,14 +22,16 @@ define([
 
 		render: function() {
 			this.$el.html(this.template({username: this.user.get('username')}));
-			this.collection.each(function(activity) {
-				var entry = new ActivityListEntry({
-					model: activity,
-					user: this.user
-				});
-				this.$el.append(entry.render().el);
-			}, this);
+			this.collection.each(this.renderActivityEntry, this);
 			return this;
+		},
+
+		renderActivityEntry: function(activity) {
+			var entry = new ActivityListEntry({
+				model: activity,
+				user: this.user
+			});
+			this.$el.append(entry.render().el);
 		},
 
 		onActivitySelectedChange: function(activity, value) {
