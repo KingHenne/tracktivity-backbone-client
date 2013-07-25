@@ -13,7 +13,7 @@ define([
 
 		initialize: function() {
 			this.listenTo(this.collection, 'reset', this.render);
-			this.listenTo(this.collection, 'change:selected', this.onUserSelectedChange);
+			this.entries = []; // array of subviews
 		},
 
 		render: function() {
@@ -23,10 +23,12 @@ define([
 
 		renderUserEntry: function(user) {
 			var entry = new UserListEntry({model: user});
+			this.entries.push(entry);
 			this.$el.append(entry.render().el);
 		},
 
-		onUserSelectedChange: function(user, value) {
+		onUserSelected: function(user) {
+			debugger;
 			if (value === false) { // we are only interested in selections
 				return;
 			}
@@ -34,11 +36,7 @@ define([
 				this.selectedUser.set('selected', false);
 			}
 			this.selectedUser = user;
-			// If the selection happens because of browser navigation -- i. e. just the
-			// state needs to be restored, but the URL is already updated -- we can
-			// still call navigate without worries, because Backbone catches navigations
-			// the the current fragment and does nothing in this case.
-			app.navigate('users/' + user.get('username'), {trigger: true});
+			app.navigate('users/' + user.get('username'));
 		},
 
 		deselect: function() {

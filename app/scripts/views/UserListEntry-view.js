@@ -5,7 +5,8 @@ define([
 	'underscore',
 	'backbone',
 	'templates',
-], function ($, _, Backbone, JST) {
+	'backbone.marionette'
+], function ($, _, Backbone, JST, Marionette) {
 	'use strict';
 
 	var UserListEntryView = Backbone.View.extend({
@@ -17,7 +18,8 @@ define([
 		},
 
 		initialize: function() {
-			this.listenTo(this.model, 'change:selected', this.updateActiveStatus);
+			this.viewModel = new Backbone.Model({selected: false});
+			this.listenTo(this.viewModel, 'change:selected', this.onSelectedChange);
 		},
 
 		render: function() {
@@ -26,13 +28,17 @@ define([
 			return this;
 		},
 
+		onSelectedChange: function() {
+			this.updateActiveStatus();
+		},
+
 		updateActiveStatus: function() {
-			this.$el.toggleClass('active', !!this.model.get('selected'));
+			this.$el.toggleClass('active', this.viewModel.get('selected'));
 		},
 
 		select: function(e) {
 			e.preventDefault();
-			this.model.set('selected', true);
+			this.viewModel.set('selected', true);
 		}
 	});
 

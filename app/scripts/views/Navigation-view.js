@@ -39,6 +39,7 @@ define([
 		selectUser: function(username) {
 			var user = this.userList.selectByUsername(username);
 			this.activityList.setUser(user).deselect();
+			return user;
 		},
 
 		selectActivity: function(activityId) {

@@ -2,6 +2,16 @@
 'use strict';
 
 require.config({
+	paths: {
+		jquery: '../bower_components/jquery/jquery',
+		underscore: '../bower_components/underscore/underscore',
+		backbone: '../bower_components/backbone/backbone',
+		'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
+		'backbone.wreqr' : '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
+		'backbone.babysitter' : '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
+		handlebars: '../bower_components/handlebars/handlebars.runtime',
+		bootstrap: 'vendor/bootstrap'
+	},
 	shim: {
 		underscore: {
 			exports: '_'
@@ -20,13 +30,6 @@ require.config({
 		handlebars: {
 			exports: 'Handlebars'
 		}
-	},
-	paths: {
-		jquery: '../bower_components/jquery/jquery',
-		backbone: '../bower_components/backbone-amd/backbone',
-		underscore: '../bower_components/underscore-amd/underscore',
-		handlebars: '../bower_components/handlebars/handlebars.runtime',
-		bootstrap: 'vendor/bootstrap'
 	}
 });
 
@@ -51,5 +54,5 @@ require([
 		}
 	});
 
-	Backbone.history.start({pushState: false});
+	Backbone.history.start({pushState: true});
 });

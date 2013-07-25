@@ -91,7 +91,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                path: 'http://localhost:<%= connect.options.port %>'
+                path: 'http://tracktivity'
             }
         },
         clean: {
