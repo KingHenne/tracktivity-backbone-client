@@ -6,7 +6,33 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 body {
 	padding-top: 50px;
 }
-.starter-template {
-	padding: 40px 15px;
-	text-align: center;
+
+.sidebar {
+	background: lighten(#000, 96%);
+	margin: $line-height-computed 0;
+	border-radius: 3px;
+	overflow: hidden;
+	h4 {
+		padding: 10px 15px;
+		margin: 0;
+	}
+	.nav {
+		li {
+			a {
+				padding: 6px 15px;
+			}
+			&.active {
+				> a {
+					font-weight: bold;
+				}
+			}
+		}
+		.nav {
+			li {
+				a {
+					padding-left: 30px;
+				}
+			}
+		}
+	}
 }
