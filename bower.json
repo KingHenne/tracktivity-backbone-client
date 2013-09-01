@@ -2,15 +2,17 @@
   "name": "backbone-tracktivity",
   "version": "0.0.1",
   "dependencies": {
-    "sass-bootstrap": "~2.3.0",
+    "sass-bootstrap": "~3.0.0",
     "jquery": "~2.0.0",
     "requirejs": "~2.1.5",
     "requirejs-text": "~2.0.5",
     "modernizr": "~2.6.2",
     "handlebars": "~1.0.0",
     "backbone": "~1.0.0",
-    "backbone.marionette": "~1.0.4",
-    "backbone.marionette.handlebars": "~0.2.0"
+    "backbone.marionette": "~1.1.0",
+    "backbone.marionette.handlebars": "~0.2.0",
+    "backbone.wreqr": "~0.2.0",
+    "backbone.babysitter": "~0.0.6"
   },
   "devDependencies": {}
 }

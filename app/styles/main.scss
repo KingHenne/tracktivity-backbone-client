@@ -1,2 +1,12 @@
+$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
+
 @import 'sass-bootstrap/lib/bootstrap';
-@import 'sass-bootstrap/lib/responsive';
+@import 'sass-bootstrap/lib/_theme';
+
+body {
+	padding-top: 50px;
+}
+.starter-template {
+	padding: 40px 15px;
+	text-align: center;
+}
