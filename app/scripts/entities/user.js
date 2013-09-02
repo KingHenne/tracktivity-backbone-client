@@ -2,11 +2,11 @@
 
 define([
 	'backbone',
-	'collections/Activities-collection'
+	'entities/activities'
 ], function (Backbone, Activities) {
 	'use strict';
 
-	var UserModel = Backbone.Model.extend({
+	var User = Backbone.Model.extend({
 
 		initialize: function() {
 			this.activities = new Activities();
@@ -15,5 +15,5 @@ define([
 
 	});
 
-	return UserModel;
+	return User;
 });

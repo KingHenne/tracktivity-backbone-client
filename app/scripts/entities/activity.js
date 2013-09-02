@@ -6,9 +6,9 @@ define([
 ], function (_, Backbone) {
 	'use strict';
 
-	var ActivityModel = Backbone.Model.extend({
+	var Activity = Backbone.Model.extend({
 
 	});
 
-	return ActivityModel;
+	return Activity;
 });

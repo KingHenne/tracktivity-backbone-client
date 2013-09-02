@@ -39,18 +39,12 @@ require.config({
 });
 
 require([
-	'jquery',
-	'backbone',
-	'backbone.marionette',
+	'app',
 	'bootstrap/dropdown',
 	'bootstrap/collapse',
 	'bootstrap/transition'
-], function ($, Backbone, Marionette) {
+], function (App) {
 
-	window.app = new Marionette.Application();
-
-	app.addInitializer(function(options) {
-		Backbone.history.start({pushState: true});
-	});
+	App.start();
 
 });

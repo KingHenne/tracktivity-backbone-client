@@ -56,7 +56,7 @@ module.exports = function (grunt) {
             },
             handlebars: {
                 files: [
-                    '<%= yeoman.app %>/scripts/templates/*.hbs'
+                    '<%= yeoman.app %>/scripts/{,*/}*.hbs'
                 ],
                 tasks: ['handlebars']
             }
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    '.tmp/scripts/templates.js': ['<%= yeoman.app %>/scripts/templates/*.hbs']
+                    '.tmp/scripts/templates.js': '<%= yeoman.app %>/scripts/templates/*.hbs'
                 }
             }
         }

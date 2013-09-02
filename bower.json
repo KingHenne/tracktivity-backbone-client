@@ -10,7 +10,6 @@
     "handlebars": "~1.0.0",
     "backbone": "~1.0.0",
     "backbone.marionette": "~1.1.0",
-    "backbone.marionette.handlebars": "~0.2.0",
     "backbone.wreqr": "~0.2.0",
     "backbone.babysitter": "~0.0.6"
   },
