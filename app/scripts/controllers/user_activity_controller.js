@@ -2,13 +2,27 @@
 
 define([
 	'backbone.marionette',
-	'modules/users/list/list_users_view',
+	'views/user_list_view',
+	'views/user_activity_layout',
 	'wreqr'
-], function (Marionette, UserListView, Wreqr) {
+], function (Marionette, UserListView, Layout, Wreqr) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
+		getLayout: function() {
+			if (!this.layout) {
+				this.layout = new Layout();
+			}
+			return this.layout;
+		},
+
+		onShowLayout: function() {
+			
+		},
+
 		listUsers: function() {
+			debugger;
+			this.listenToOnce(this.layout, 'show', this.onShowLayout);
 			var users = Wreqr.reqres.request('user:entities');
 			this.userListView = new UserListView({
 				collection: users

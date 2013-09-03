@@ -4,9 +4,9 @@ define([
 	'backbone',
 	'backbone.marionette',
 	'entities/users',
-	'modules/users/list/list_users_controller',
+	'controllers/user_activity_controller',
 	'wreqr'
-], function (Backbone, Marionette, Users, UserController, Wreqr) {
+], function (Backbone, Marionette, Users, UserActivityController, Wreqr) {
 	'use strict';
 
 	var AppRouter = Backbone.Marionette.AppRouter.extend({
@@ -17,26 +17,28 @@ define([
 	});
 
 	var App = new Marionette.Application();
-	
-	var userController = new UserController();
 
 	App.addRegions({
-		asideRegion: '#aside-region',
-		contentRegion: '#content-region'
+		headRegion: '#head-region',
+		mainRegion: '#main-region'
 	});
+	
+	var userActivityController = new UserActivityController();
+	App.mainRegion.show(userActivityController.getLayout());
 	
 	var API = {
 		listUsers: function() {
-			App.asideRegion.show(userController.listUsers());
+			userActivityController.listUsers();
 		},
 		showUser: function(username) {
-			Backbone.history.navigate('users/' + username);
-			userController.showUser(username);
+			userActivityController.showUser(username);
 		}
 	};
 
 	Wreqr.vent.on('show:user', function(user) {
-		API.showUser(user.get('username'));
+		var username = user.get('username');
+		Backbone.history.navigate('users/' + username);
+		API.showUser(username);
 	});
 
 	App.addInitializer(function(options) {
