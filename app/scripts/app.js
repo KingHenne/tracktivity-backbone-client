@@ -23,8 +23,7 @@ define([
 		mainRegion: '#main-region'
 	});
 	
-	var userActivityController = new UserActivityController();
-	App.mainRegion.show(userActivityController.getLayout());
+	var userActivityController = new UserActivityController(App.mainRegion);
 	
 	var API = {
 		listUsers: function() {
@@ -53,8 +52,15 @@ define([
 	]);
 	
 	Wreqr.reqres.setHandler('user:entities', function() {
-		// TODO: fetch from API instead
-		return testUsers;
+		var users = new Users();
+		// TODO: fetch from API instead of mocking with test users
+		// (Backbone's Collection.fetch returns a promise as well)
+		users.fetch = function() {
+			var deferred = $.Deferred();
+			deferred.resolve(testUsers);
+			return deferred.promise();
+		};
+		return users.fetch();
 	});
 
 	return App;

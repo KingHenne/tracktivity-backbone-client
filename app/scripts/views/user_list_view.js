@@ -35,11 +35,21 @@ define([
 		className: 'sidebar',
 
 		selectItemView: function(itemView) {
+			this.resetSelection();
+			this.selectedItemView = itemView;
+			if (this.selectedItemView) {
+				this.selectedItemView.select();
+			}
+		},
+
+		resetSelection: function() {
 			if (this.selectedItemView) {
 				this.selectedItemView.deselect();
 			}
-			this.selectedItemView = itemView;
-			this.selectedItemView.select();
+		},
+
+		reset: function() {
+			this.resetSelection();
 		}
 	});
 
