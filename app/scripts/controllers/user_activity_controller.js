@@ -4,10 +4,11 @@ define([
 	'jquery',
 	'underscore',
 	'backbone.marionette',
-	'views/user_list_view',
+	'controllers/user_list_controller',
+	'controllers/user_show_controller',
 	'views/user_activity_layout',
 	'utils/dispatcher'
-], function ($, _, Marionette, UserListView, Layout, Dispatcher) {
+], function ($, _, Marionette, UserListController, UserShowController, Layout, Dispatcher) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -15,55 +16,66 @@ define([
 			this.appRegion = appRegion;
 		},
 
-		_userClicked: function(itemView, user) {
-			Dispatcher.trigger('show:user', user);
+		_renderLayout : function(deferred) {
+			this.listenToOnce(this.layout, 'show', function() {
+				deferred.resolve(this.layout);
+			});
+			this.appRegion.show(this.layout);
 		},
-
 		renderLayout: function() {
 			var deferred = $.Deferred();
-			var layout = new Layout();
-			layout.on('show', function() {
-				deferred.resolve(layout);
-			});
-			this.appRegion.show(layout);
-			return deferred.promise();
-		},
-
-		listUsers: function() {
-			var deferred = $.Deferred();
-			if (this.userListView) {
-				// already rendered, just reset to initial state
-				this.userListView.reset();
-				deferred.resolve();
+			if (!this.layout) {
+				this.layout = new Layout();
+				this._renderLayout(deferred);
+			} else if (this.layout.isClosed) {
+				this._renderLayout(deferred);
 			} else {
-				var renderingLayout = this.renderLayout();
-				var fetchingUsers = Dispatcher.request('user:entities');
-				$.when(renderingLayout, fetchingUsers).done(_.bind(function(layout, users) {
-					this.userListView = new UserListView({
-						collection: users
-					});
-					this.listenToOnce(this.userListView, 'show', function() {
-						deferred.resolve();
-					});
-					this.listenTo(this.userListView, 'itemview:user:clicked', this._userClicked);
-					layout.asideRegion.show(this.userListView);
-				}, this));
+				deferred.resolve(this.layout);
 			}
 			return deferred.promise();
 		},
 
-		_selectUser: function(username) {
-			var user = this.userListView.collection.findWhere({username: username});
-			var itemView = this.userListView.children.findByModel(user);
-			this.userListView.selectItemView(itemView);
+		isListRendered: function() {
+			return this.listController && this.listController.isRendered();
 		},
 
+		_listUsers: function(deferred) {
+			this.listController.listUsers().done(_.bind(function() {
+				deferred.resolve();
+			}, this));
+		},
+		listUsers: function() {
+			var deferred = $.Deferred();
+			if (!this.listController) {
+				var renderingLayout = this.renderLayout();
+				var fetchingUsers = Dispatcher.request('user:entities');
+				$.when(renderingLayout, fetchingUsers).done(_.bind(function(layout, users) {
+					this.listController = new UserListController({
+						users: users,
+						region: layout.asideRegion
+					});
+					this._listUsers(deferred);
+				}, this));
+			} else if (!this.listController.isRendered()) {
+				this._listUsers(deferred);
+			} else {
+				// already rendered, just reset to initial state
+				this.listController.reset();
+				deferred.resolve();
+			}
+			return deferred.promise();
+		},
+
+		_showUser: function(username) {
+			this.listController.selectUser(username);
+			// TODO: show user details with UserShowController
+		},
 		showUser: function(username) {
-			if (this.userListView) {
-				this._selectUser(username);
+			if (this.isListRendered()) {
+				this._showUser(username);
 			} else {
 				this.listUsers().done(_.bind(function() {
-					this._selectUser(username);
+					this._showUser(username);
 				}, this));
 			}
 		}
