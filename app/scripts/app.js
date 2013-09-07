@@ -1,12 +1,13 @@
 /*global define*/
 
 define([
+	'jquery',
 	'backbone',
 	'backbone.marionette',
 	'entities/users',
 	'controllers/user_activity_controller',
-	'wreqr'
-], function (Backbone, Marionette, Users, UserActivityController, Wreqr) {
+	'utils/dispatcher'
+], function ($, Backbone, Marionette, Users, UserActivityController, Dispatcher) {
 	'use strict';
 
 	var AppRouter = Backbone.Marionette.AppRouter.extend({
@@ -34,14 +35,14 @@ define([
 		}
 	};
 
-	Wreqr.vent.on('show:user', function(user) {
+	Dispatcher.on('show:user', function(user) {
 		var username = user.get('username');
 		Backbone.history.navigate('users/' + username);
 		API.showUser(username);
 	});
 
-	App.addInitializer(function(options) {
-		var appRouter = new AppRouter({controller: API});
+	App.addInitializer(function() {
+		new AppRouter({controller: API});
 		Backbone.history.start({pushState: true});
 	});
 
@@ -51,7 +52,7 @@ define([
 		{username: 'hanswurst', firstname: 'Hans', lastname: 'Wurst'}
 	]);
 	
-	Wreqr.reqres.setHandler('user:entities', function() {
+	Dispatcher.setHandler('user:entities', function() {
 		var users = new Users();
 		// TODO: fetch from API instead of mocking with test users
 		// (Backbone's Collection.fetch returns a promise as well)

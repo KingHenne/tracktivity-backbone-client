@@ -1,11 +1,24 @@
-/*global describe, it */
+/*global define, describe, it, expect */
 'use strict';
-(function () {
-	describe('Give it some context', function () {
-		describe('maybe a bit more context here', function () {
-			it('should run here few assertions', function () {
 
-			});
+define([
+	'backbone',
+	'backbone.marionette',
+	'utils/dispatcher'
+], function (Backbone, Marionette, Dispatcher) {
+
+	describe('The Dispatcher', function () {
+		it('should have valid shortcuts for Wreqr\'s reqres functions', function (done) {
+			Dispatcher.setHandler('test', function() { return 'OK'; });
+			var result = Dispatcher.request('test');
+			expect(result).to.equal('OK');
+			done();
+		});
+		it('should have valid shortcuts for Wreqr\'s event functions', function () {
+			var result = null;
+			Dispatcher.on('test', function() { result = 'OK'; });
+			Dispatcher.trigger('test');
+			expect(result).to.equal('OK');
 		});
 	});
 })();

@@ -1,11 +1,13 @@
 /*global define*/
 
 define([
+	'jquery',
+	'underscore',
 	'backbone.marionette',
 	'views/user_list_view',
 	'views/user_activity_layout',
-	'wreqr'
-], function (Marionette, UserListView, Layout, Wreqr) {
+	'utils/dispatcher'
+], function ($, _, Marionette, UserListView, Layout, Dispatcher) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -14,7 +16,7 @@ define([
 		},
 
 		_userClicked: function(itemView, user) {
-			Wreqr.vent.trigger('show:user', user);
+			Dispatcher.trigger('show:user', user);
 		},
 
 		renderLayout: function() {
@@ -35,7 +37,7 @@ define([
 				deferred.resolve();
 			} else {
 				var renderingLayout = this.renderLayout();
-				var fetchingUsers = Wreqr.reqres.request('user:entities');
+				var fetchingUsers = Dispatcher.request('user:entities');
 				$.when(renderingLayout, fetchingUsers).done(_.bind(function(layout, users) {
 					this.userListView = new UserListView({
 						collection: users
