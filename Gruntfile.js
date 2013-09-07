@@ -412,6 +412,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'createDefaultTemplate',
         'handlebars',
+        'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
         'requirejs',
