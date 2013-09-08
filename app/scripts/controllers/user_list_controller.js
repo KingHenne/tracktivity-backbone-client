@@ -42,10 +42,13 @@ define([
 			Dispatcher.trigger('show:user', user);
 		},
 
-		selectUser: function(username) {
-			var user = this.users.findWhere({username: username});
+		selectUser: function(user) {
+			if (typeof user === 'string') { // i.e. a username 
+				user = this.users.findWhere({username: user});
+			}
 			var itemView = this.view.children.findByModel(user);
 			this.view.selectItemView(itemView);
+			return user;
 		},
 
 		reset: function() {

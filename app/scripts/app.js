@@ -30,38 +30,29 @@ define([
 		listUsers: function() {
 			userActivityController.listUsers();
 		},
-		showUser: function(username) {
-			userActivityController.showUser(username);
+		// 'user' can be either a User entity (i.e. object) or a username (i.e. string)
+		showUser: function(user) {
+			userActivityController.showUser(user);
 		}
 	};
 
 	Dispatcher.on('show:user', function(user) {
-		var username = user.get('username');
-		Backbone.history.navigate('users/' + username);
-		API.showUser(username);
+		Backbone.history.navigate('users/' + user.get('username'));
+		API.showUser(user);
+	});
+	
+	Dispatcher.setHandler('user:entities', function() {
+		var users = new Users();
+		var deferred = $.Deferred();
+		users.fetch().done(function() {
+			deferred.resolve(users);
+		});
+		return deferred.promise();
 	});
 
 	App.addInitializer(function() {
 		new AppRouter({controller: API});
 		Backbone.history.start({pushState: true});
-	});
-
-	var testUsers = new Users([
-		{username: 'hendrik', firstname: 'Hendrik', lastname: 'Liebau'},
-		{username: 'anna', firstname: 'Anna', lastname: 'Schinko'},
-		{username: 'hanswurst', firstname: 'Hans', lastname: 'Wurst'}
-	]);
-	
-	Dispatcher.setHandler('user:entities', function() {
-		var users = new Users();
-		// TODO: fetch from API instead of mocking with test users
-		// (Backbone's Collection.fetch returns a promise as well)
-		users.fetch = function() {
-			var deferred = $.Deferred();
-			deferred.resolve(testUsers);
-			return deferred.promise();
-		};
-		return users.fetch();
 	});
 
 	return App;

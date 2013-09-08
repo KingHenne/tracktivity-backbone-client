@@ -9,8 +9,9 @@ define([
 	var User = Backbone.Model.extend({
 
 		initialize: function() {
-			this.activities = new Activities();
-			this.activities.url = '/api/users/' + this.get('username') + '/activities';
+			this.activities = new Activities(null, {
+				url: '/api/users/' + this.get('username') + '/activities'
+			});
 		}
 
 	});

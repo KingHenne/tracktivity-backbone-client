@@ -7,7 +7,7 @@ define([
 	'use strict';
 
 	var Layout = Marionette.Layout.extend({
-		template: JST['app/scripts/templates/user_activty_layout.hbs'],
+		template: JST['app/scripts/templates/user_activity_layout.hbs'],
 
 		regions: {
 			asideRegion: '#aside-region',
