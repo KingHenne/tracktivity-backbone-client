@@ -8,7 +8,13 @@ define([
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
-		
+		initialize: function(options) {
+			this.region = options.region;
+		},
+
+		showActivity: function(activity) {
+			
+		}
 	});
 
 	return Controller;

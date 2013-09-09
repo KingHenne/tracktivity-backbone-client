@@ -6,10 +6,11 @@ define([
 	'backbone.marionette',
 	'controllers/user_list_controller',
 	'controllers/user_show_controller',
+	'controllers/activity_controller',
 	'views/user_activity_layout',
 	'utils/dispatcher',
 	'templates'
-], function ($, _, Marionette, UserListController, UserShowController, Layout, Dispatcher, JST) {
+], function ($, _, Marionette, UserListController, UserShowController, ActivityController, Layout, Dispatcher, JST) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -98,6 +99,24 @@ define([
 			} else {
 				this.listUsers(true).done(_.bind(function() {
 					this._showUser(user);
+				}, this));
+			}
+		},
+
+		_showActivity: function(activity) {
+			if (!this.activityController) {
+				this.activityController = new ActivityController({
+					region: this.layout.contentRegion
+				});
+			}
+			this.activityController.showActivity(activity);
+		},
+		showActivity: function(activity) {
+			if (this.isListRendered()) {
+				this._showActivity(activity);
+			} else {
+				this.listUsers(true).done(_.bind(function() {
+					this._showActivity(activity);
 				}, this));
 			}
 		}
