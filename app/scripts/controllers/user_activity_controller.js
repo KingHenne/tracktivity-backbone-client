@@ -86,7 +86,8 @@ define([
 			user = this.listController.selectUser(user);
 			if (!this.userShowController) {
 				this.userShowController = new UserShowController({
-					region: this.layout.contentRegion
+					region: this.layout.contentRegion,
+					user: user
 				});
 			}
 			this.userShowController.showUser(user);
