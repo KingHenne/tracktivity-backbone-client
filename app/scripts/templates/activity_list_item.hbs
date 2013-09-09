@@ -1,1 +1,8 @@
-<a href="/activities/{{id}}">{{created}}</a>
+<a href="/activities/{{id}}">
+	{{#if name}}
+		{{name}}
+	{{else}}
+		{{dateFormat created}}
+	{{/if}}
+</a>
+<small class="text-muted">{{dateFromNow created}}</small>
