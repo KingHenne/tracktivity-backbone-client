@@ -3,9 +3,8 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone.marionette',
-	'utils/dispatcher'
-], function ($, _, Marionette, Dispatcher) {
+	'backbone.marionette'
+], function ($, _, Marionette) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({

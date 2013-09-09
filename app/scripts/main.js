@@ -41,11 +41,12 @@ require.config({
 
 require([
 	'app',
+	'handlebars',
 	'moment',
 	'bootstrap/dropdown',
 	'bootstrap/collapse',
 	'bootstrap/transition'
-], function (App, moment) {
+], function (App, Handlebars, moment) {
 
 	App.start();
 
@@ -53,7 +54,7 @@ require([
 		var f = block.hash.format || 'MMM DD, YYYY hh:mm A';
 		return moment(context).format(f);
 	});
-	Handlebars.registerHelper('dateFromNow', function(context, block) {
+	Handlebars.registerHelper('dateFromNow', function(context) {
 		return moment(context).fromNow();
 	});
 });
