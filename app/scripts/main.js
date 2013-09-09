@@ -50,10 +50,14 @@ require([
 
 	App.start();
 
+	// usage example: {{dateFormat creation_date format='MMMM YYYY'}}
+	// 'format' is optional and defaults to 'MMM DD, YYYY hh:mm A'
 	Handlebars.registerHelper('dateFormat', function(context, block) {
 		var f = block.hash.format || 'MMM DD, YYYY hh:mm A';
 		return moment(context).format(f);
 	});
+
+	// ouputs a relative date
 	Handlebars.registerHelper('dateFromNow', function(context) {
 		return moment(context).fromNow();
 	});
