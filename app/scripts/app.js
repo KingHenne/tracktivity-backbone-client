@@ -5,7 +5,7 @@ define([
 	'backbone',
 	'backbone.marionette',
 	'entities/users',
-	'controllers/user_activity_controller',
+	'controllers/main_user_activity_controller',
 	'utils/dispatcher'
 ], function ($, Backbone, Marionette, Users, UserActivityController, Dispatcher) {
 	'use strict';
