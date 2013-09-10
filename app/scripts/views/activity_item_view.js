@@ -7,7 +7,6 @@ define([
 	'use strict';
 
 	var ActivityItemView = Marionette.ItemView.extend({
-		tagName: 'li',
 		template: JST['app/scripts/templates/activity_list_item.hbs'],
 		
 		events: {
