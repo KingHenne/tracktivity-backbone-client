@@ -103,20 +103,20 @@ define([
 			}
 		},
 
-		_showActivity: function(activity) {
+		_showActivity: function(activityId) {
 			if (!this.activityController) {
 				this.activityController = new ActivityController({
 					region: this.layout.contentRegion
 				});
 			}
-			this.activityController.showActivity(activity);
+			this.activityController.showActivity(activityId);
 		},
-		showActivity: function(activity) {
+		showActivity: function(activityId) {
 			if (this.isListRendered()) {
-				this._showActivity(activity);
+				this._showActivity(activityId);
 			} else {
 				this.listUsers(true).done(_.bind(function() {
-					this._showActivity(activity);
+					this._showActivity(activityId);
 				}, this));
 			}
 		}

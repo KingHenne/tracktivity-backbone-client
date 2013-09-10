@@ -36,8 +36,8 @@ define([
 			userActivityController.showUser(user);
 		},
 		// 'activity' can be either an Activity entity (i.e. object) or an id (i.e. string)
-		showActivity: function(activity) {
-			userActivityController.showActivity(activity);
+		showActivity: function(activityId) {
+			userActivityController.showActivity(activityId);
 		}
 	};
 
@@ -47,8 +47,9 @@ define([
 	});
 
 	Dispatcher.on('show:activity', function(activity) {
-		Backbone.history.navigate('activities/' + activity.get('id'));
-		API.showActivity(activity);
+		var activityId = activity.get('id');
+		Backbone.history.navigate('activities/' + activityId);
+		API.showActivity(activityId);
 	});
 
 	Dispatcher.setHandler('user:entities', function() {
