@@ -16,7 +16,8 @@ define([
 		onRender: function() {
 			var track = this.model.get('track');
 			if (track) {
-				var map = Leaflet.map('activity-map');
+				var mapContainer = this.$('.activity-map')[0];
+				var map = Leaflet.map(mapContainer);
 				map.fitBounds(track.latLngBounds);
 
 				Leaflet.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
