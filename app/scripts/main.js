@@ -11,7 +11,8 @@ require.config({
 		'backbone.babysitter' : '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
 		handlebars: '../bower_components/handlebars/handlebars.runtime',
 		bootstrap: '../bower_components/sass-bootstrap/js',
-		moment: '../bower_components/momentjs/moment'
+		moment: '../bower_components/momentjs/moment',
+		leaflet: '../bower_components/leaflet/dist/leaflet'
 	},
 	shim: {
 		jquery: {

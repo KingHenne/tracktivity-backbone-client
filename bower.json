@@ -12,7 +12,8 @@
     "backbone.marionette": "~1.1.0",
     "backbone.wreqr": "~0.2.0",
     "backbone.babysitter": "~0.0.6",
-    "momentjs": "~2.1.0"
+    "momentjs": "~2.1.0",
+    "leaflet": "~0.6.4"
   },
   "devDependencies": {}
 }

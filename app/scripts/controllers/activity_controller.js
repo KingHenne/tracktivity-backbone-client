@@ -14,8 +14,10 @@ define([
 			this.region = options.region;
 		},
 
-		showActivity: function(activityId) {
-			var activity = new Activity({ id: activityId });
+		showActivity: function(activity) {
+			if (typeof activity === 'string') {
+				activity = new Activity({ id: activity });
+			}
 			this.view = new ActivityView({ model: activity });
 			this.region.show(this.view);
 			activity.fetch();

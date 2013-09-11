@@ -8,6 +8,7 @@ define([
 
 	var Layout = Marionette.Layout.extend({
 		template: JST['app/scripts/templates/user_activity_layout.hbs'],
+		className: 'row',
 
 		regions: {
 			asideRegion: '#aside-region',
