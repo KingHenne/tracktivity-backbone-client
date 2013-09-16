@@ -20,22 +20,16 @@ define([
 		},
 
 		listUsers: function() {
-			var deferred = $.Deferred();
 			if (this.isRendered()) {
 				// already rendered, just reset to initial state
 				this.view.reset();
-				deferred.resolve();
 			} else {
 				this.view = new UserListView({
 					collection: this.users
 				});
-				this.listenToOnce(this.view, 'show', function() {
-					deferred.resolve();
-				});
 				this.listenTo(this.view, 'itemview:user:clicked', this.onUserClicked);
 				this.region.show(this.view);
 			}
-			return deferred.promise();
 		},
 
 		onUserClicked: function(itemView, user) {

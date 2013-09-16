@@ -14,7 +14,8 @@ define([
 		appRoutes: {
 			'': 'listUsers',
 			'users/:username': 'showUser',
-			'activities/:id': 'showActivity'
+			'activities/:activityId': 'showActivity',
+			'users/:username/activities/:activityId': 'showUserActivity'
 		},
 	});
 
@@ -38,6 +39,9 @@ define([
 		// 'activity' can be either an Activity entity (i.e. object) or an id (i.e. string)
 		showActivity: function(activity) {
 			userActivityController.showActivity(activity);
+		},
+		showUserActivity: function(user, activity) {
+			userActivityController.showUserActivity(user, activity);
 		}
 	};
 
@@ -49,6 +53,11 @@ define([
 	Dispatcher.on('show:activity', function(activity) {
 		Backbone.history.navigate('activities/' + activity.get('id'));
 		API.showActivity(activity);
+	});
+
+	Dispatcher.on('show:user:activity', function(user, activity) {
+		Backbone.history.navigate('users/' + user.get('username') + '/activities/' + activity.get('id'));
+		API.showUserActivity(user, activity);
 	});
 
 	Dispatcher.setHandler('user:entities', function() {

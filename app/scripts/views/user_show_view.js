@@ -15,7 +15,11 @@ define([
 		template: JST['app/scripts/templates/user_show.hbs'],
 		emptyView: NoItemsView,
 		itemView: ActivityItemView,
-		itemViewContainer: '.activities'
+		itemViewContainer: '.list',
+
+		onRender: function() {
+			debugger;
+		}
 	});
 
 	return View;

@@ -17,8 +17,12 @@ define([
 			this.userView = this.getUserView(options.user);
 		},
 
+		isUserRendered: function(user) {
+			return !!this.userView && !this.userView.isClosed && this.userView.model === user;
+		},
+
 		onActivityClicked: function(itemView, activity) {
-			Dispatcher.trigger('show:activity', activity);
+			Dispatcher.trigger('show:user:activity', this.userView.model, activity);
 		},
 
 		onViewClosed: function() {

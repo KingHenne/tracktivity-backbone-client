@@ -18,27 +18,19 @@ define([
 			this.appRegion = appRegion;
 		},
 
-		_renderLayout : function(deferred) {
-			this.listenToOnce(this.layout, 'show', function() {
-				deferred.resolve(this.layout);
-			});
-			this.appRegion.show(this.layout);
-		},
 		renderLayout: function() {
-			var deferred = $.Deferred();
 			if (!this.layout) {
 				this.layout = new Layout();
-				this._renderLayout(deferred);
-			} else if (this.layout.isClosed) {
-				this._renderLayout(deferred);
-			} else {
-				deferred.resolve(this.layout);
 			}
-			return deferred.promise();
+			this.appRegion.show(this.layout);
 		},
 
-		isListRendered: function() {
-			return !!this.listController && this.listController.isRendered();
+		isUserListRendered: function() {
+			return !!this.userListController && this.userListController.isRendered();
+		},
+
+		isUserRendered: function(user) {
+			return !!this.userShowController && this.userShowController.isUserRendered(user);
 		},
 
 		getHomeView: function() {
@@ -50,31 +42,27 @@ define([
 			return this._homeView;
 		},
 
-		_listUsers: function(deferred) {
-			this.listController.listUsers().done(_.bind(function() {
-				deferred.resolve();
-			}, this));
-		},
 		listUsers: function(skipHomeContent) {
 			var deferred = $.Deferred();
-			if (!this.listController) {
-				var renderingLayout = this.renderLayout();
-				var fetchingUsers = Dispatcher.request('user:entities');
-				$.when(renderingLayout, fetchingUsers).done(_.bind(function(layout, users) {
-					this.listController = new UserListController({
+			if (!this.userListController) {
+				this.renderLayout();
+				Dispatcher.request('user:entities').done(_.bind(function(users) {
+					this.userListController = new UserListController({
 						users: users,
-						region: layout.asideRegion
+						region: this.layout.asideRegion
 					});
-					this._listUsers(deferred);
+					this.userListController.listUsers();
 					if (!skipHomeContent) {
-						layout.contentRegion.show(this.getHomeView());
+						this.layout.contentRegion.show(this.getHomeView());
 					}
+					deferred.resolve();
 				}, this));
-			} else if (!this.listController.isRendered()) {
-				this._listUsers(deferred);
+			} else if (!this.userListController.isRendered()) {
+				this.userListController.listUsers();
+				deferred.resolve();
 			} else {
 				// already rendered, just reset to initial state
-				this.listController.reset();
+				this.userListController.reset();
 				this.layout.contentRegion.show(this.getHomeView());
 				deferred.resolve();
 			}
@@ -84,7 +72,7 @@ define([
 		_showUser: function(user) {
 			// 'user' can also be a username (i.e. a string),
 			// so we overwrite it here with the User entity.
-			user = this.listController.selectUser(user);
+			user = this.userListController.selectUser(user);
 			if (!this.userShowController) {
 				this.userShowController = new UserShowController({
 					region: this.layout.contentRegion,
@@ -94,28 +82,42 @@ define([
 			this.userShowController.showUser(user);
 		},
 		showUser: function(user) {
-			if (this.isListRendered()) {
+			var deferred = $.Deferred();
+			if (this.isUserListRendered()) {
 				this._showUser(user);
+				deferred.resolve();
 			} else {
 				this.listUsers(true).done(_.bind(function() {
 					this._showUser(user);
+					deferred.resolve();
 				}, this));
 			}
+			return deferred.promise();
 		},
 
-		_showActivity: function(activity) {
+		_showActivity: function(activity, region) {
 			if (!this.activityController) {
 				this.activityController = new ActivityController({
-					region: this.layout.contentRegion
+					region: !!region ? region : this.layout.contentRegion
 				});
 			}
 			this.activityController.showActivity(activity);
 		},
 		showActivity: function(activity) {
-			if (this.isListRendered()) {
+			if (this.isUserListRendered()) {
 				this._showActivity(activity);
 			} else {
 				this.listUsers(true).done(_.bind(function() {
+					this._showActivity(activity);
+				}, this));
+			}
+		},
+		showUserActivity: function(user, activity) {
+			if (this.isUserRendered(user)) {
+				this._showActivity(activity);
+			} else {
+				debugger;
+				this.showUser(user).done(_.bind(function() {
 					this._showActivity(activity);
 				}, this));
 			}
