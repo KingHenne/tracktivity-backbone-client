@@ -15,7 +15,8 @@ define([
 	var UserView = Marionette.CompositeView.extend({
 		template: JST['app/scripts/templates/user_details.hbs'],
 		emptyView: NoActivitiesView,
-		itemView: ActivityItemView
+		itemView: ActivityItemView,
+		itemViewContainer: '.activities'
 	});
 
 	var Layout = Marionette.Layout.extend({

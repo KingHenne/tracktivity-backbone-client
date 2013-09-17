@@ -80,16 +80,15 @@ define([
 				});
 			}
 			this.userShowController.showUser(user);
+			return user;
 		},
 		showUser: function(user) {
 			var deferred = $.Deferred();
 			if (this.isUserListRendered()) {
-				this._showUser(user);
-				deferred.resolve();
+				deferred.resolve(this._showUser(user));
 			} else {
 				this.listUsers(true).done(_.bind(function() {
-					this._showUser(user);
-					deferred.resolve();
+					deferred.resolve(this._showUser(user));
 				}, this));
 			}
 			return deferred.promise();
@@ -97,10 +96,9 @@ define([
 
 		_showActivity: function(activity, region) {
 			if (!this.activityController) {
-				this.activityController = new ActivityController({
-					region: !!region ? region : this.layout.contentRegion
-				});
+				this.activityController = new ActivityController();
 			}
+			this.activityController.region = !!region ? region : this.layout.contentRegion;
 			this.activityController.showActivity(activity);
 		},
 		showActivity: function(activity) {
@@ -116,7 +114,7 @@ define([
 			if (this.isUserRendered(user)) {
 				this._showActivity(activity, this.userShowController.getLayout(user).map);
 			} else {
-				this.showUser(user).done(_.bind(function() {
+				this.showUser(user).done(_.bind(function(user) {
 					this._showActivity(activity, this.userShowController.getLayout(user).map);
 				}, this));
 			}

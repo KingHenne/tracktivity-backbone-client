@@ -23,14 +23,12 @@ define([
 			} else {
 				this.view = new ActivityView({ model: activity });
 			}
-			if (this.region.currentView !== this.view) {
+			if (this.region.currentView === this.view) {
+				activity.getTrack().then(_.bind(this.view.showTrack, this.view));
+			} else {
 				this.region.show(this.view);
+				activity.fetch();
 			}
-			activity.fetch();
-		},
-
-		showMap: function(track) {
-			
 		}
 	});
 
