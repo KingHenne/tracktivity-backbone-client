@@ -7,7 +7,7 @@ define([
 	'controllers/user_list_controller',
 	'controllers/user_show_controller',
 	'controllers/activity_controller',
-	'views/user_activity_layout',
+	'views/main_layout',
 	'utils/dispatcher',
 	'templates'
 ], function ($, _, Marionette, UserListController, UserShowController, ActivityController, Layout, Dispatcher, JST) {
@@ -114,11 +114,10 @@ define([
 		},
 		showUserActivity: function(user, activity) {
 			if (this.isUserRendered(user)) {
-				this._showActivity(activity);
+				this._showActivity(activity, this.userShowController.getLayout(user).map);
 			} else {
-				debugger;
 				this.showUser(user).done(_.bind(function() {
-					this._showActivity(activity);
+					this._showActivity(activity, this.userShowController.getLayout(user).map);
 				}, this));
 			}
 		}

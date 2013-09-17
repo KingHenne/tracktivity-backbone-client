@@ -4,54 +4,37 @@ define([
 	'jquery',
 	'underscore',
 	'backbone.marionette',
-	'utils/dispatcher',
-	'views/user_show_view',
+	'views/user_show_layout',
 	'entities/user',
 	'entities/activities'
-], function ($, _, Marionette, Dispatcher, UserShowView, User, Activities) {
+], function ($, _, Marionette, UserShowLayout, User, Activities) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
 		initialize: function(options) {
 			this.region = options.region;
-			this.userView = this.getUserView(options.user);
+			this.layout = this.getLayout(options.user);
 		},
 
 		isUserRendered: function(user) {
-			return !!this.userView && !this.userView.isClosed && this.userView.model === user;
+			return !!this.layout && !this.layout.isClosed && this.layout.model === user;
 		},
 
-		onActivityClicked: function(itemView, activity) {
-			Dispatcher.trigger('show:user:activity', this.userView.model, activity);
-		},
-
-		onViewClosed: function() {
-			this.userView = null;
-		},
-
-		getUserView: function(user) {
-			var view = this.userView;
-			if (view) {
-				view.model.set(user.attributes);
-				view.collection.reset(user.activities.models);
-			} else {
-				view = new UserShowView({
-					model: new User(user.attributes),
-					collection: new Activities(user.activities.models)
+		getLayout: function(user) {
+			if (this.user !== user) {
+				this.layout = new UserShowLayout({
+					model: user,
+					collection: user.activities
 				});
-				this.listenTo(view, 'itemview:activity:clicked', this.onActivityClicked);
-				this.listenTo(view, 'close', this.onViewClosed);
+				this.user = user;
 			}
-			return view;
+			return this.layout;
 		},
 
 		showUser: function(user) {
-			this.userView = this.getUserView(user);
-			this.region.show(this.userView);
+			this.region.show(this.getLayout(user));
 			// always re-fetch activities to get the latest list
-			user.activities.fetch().done(_.bind(function(activities) {
-				this.userView.collection.set(activities);
-			}, this));
+			user.activities.fetch();
 		}
 	});
 

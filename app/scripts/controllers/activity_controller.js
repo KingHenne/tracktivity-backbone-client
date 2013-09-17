@@ -18,9 +18,19 @@ define([
 			if (typeof activity === 'string') {
 				activity = new Activity({ id: activity });
 			}
-			this.view = new ActivityView({ model: activity });
-			this.region.show(this.view);
+			if (this.view) {
+				this.view.model = activity;
+			} else {
+				this.view = new ActivityView({ model: activity });
+			}
+			if (this.region.currentView !== this.view) {
+				this.region.show(this.view);
+			}
 			activity.fetch();
+		},
+
+		showMap: function(track) {
+			
 		}
 	});
 
