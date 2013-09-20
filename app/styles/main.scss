@@ -8,6 +8,12 @@ body {
 	padding-top: 50px;
 }
 
+#aside-region {
+	.alert {
+		margin-top: 20px;
+	}
+}
+
 .sidebar {
 	background: lighten(#000, 96%);
 	margin: $line-height-computed 0;

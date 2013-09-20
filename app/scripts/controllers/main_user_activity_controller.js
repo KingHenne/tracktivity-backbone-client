@@ -42,21 +42,34 @@ define([
 			return this._homeView;
 		},
 
+		getErrorView: function(error) {
+			return new Marionette.ItemView({
+				template: JST['app/scripts/templates/error.hbs'],
+				className: 'alert alert-danger',
+				model: new Backbone.Model({error: error})
+			});
+		},
+
 		listUsers: function(skipHomeContent) {
 			var deferred = $.Deferred();
 			if (!this.userListController) {
 				this.renderLayout();
-				Dispatcher.request('user:entities').done(_.bind(function(users) {
-					this.userListController = new UserListController({
-						users: users,
-						region: this.layout.asideRegion
-					});
-					this.userListController.listUsers();
-					if (!skipHomeContent) {
+				Dispatcher.request('user:entities')
+					.done(_.bind(function(users) {
+						this.userListController = new UserListController({
+							users: users,
+							region: this.layout.asideRegion
+						});
+						this.userListController.listUsers();
+						if (!skipHomeContent) {
+							this.layout.contentRegion.show(this.getHomeView());
+						}
+						deferred.resolve();
+					}, this))
+					.fail(_.bind(function(error) {
 						this.layout.contentRegion.show(this.getHomeView());
-					}
-					deferred.resolve();
-				}, this));
+						this.layout.asideRegion.show(this.getErrorView(error));
+					}, this));
 			} else if (!this.userListController.isRendered()) {
 				this.userListController.listUsers();
 				deferred.resolve();

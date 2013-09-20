@@ -63,9 +63,13 @@ define([
 	Dispatcher.setHandler('user:entities', function() {
 		var users = new Users();
 		var deferred = $.Deferred();
-		users.fetch().done(function() {
-			deferred.resolve(users);
-		});
+		users.fetch()
+			.done(function() {
+				deferred.resolve(users);
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				deferred.reject(errorThrown);
+			});
 		return deferred.promise();
 	});
 
