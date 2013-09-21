@@ -32,14 +32,9 @@ define([
 			}
 			var layout = this.getLayout(region);
 			layout.showActivity(activity);
-			var track = activity.get('track');
-			if (track) {
-				layout.mapView.showTrack(track);
-			} else {
-				activity.fetch().done(function() {
-					layout.mapView.showTrack(activity.get('track'));
-				});
-			}
+			activity.getMultiPolyLine().done(function(multiPolyline) {
+				layout.mapView.showMultiPolyline(multiPolyline);
+			});
 		}
 	});
 

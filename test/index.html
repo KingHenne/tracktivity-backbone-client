@@ -13,10 +13,10 @@
 
 	<script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
 	<script>
-		mocha.setup('bdd');
+		mocha.setup();
 		window.expect = chai.expect;
 
-		require(['spec/test.js'], function (t) {
+		require(['spec/dispatcherSpec.js', 'spec/activitySpec.js'], function () {
 			mocha.run();
 		});
 	</script>

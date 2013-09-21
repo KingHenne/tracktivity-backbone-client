@@ -32,19 +32,16 @@ define([
 			return this;
 		},
 
-		showTrack: function(track) {
+		showMultiPolyline: function(multiPolyline) {
 			if (this.$el.is(':hidden')) {
 				this.$el.fadeIn();
 			}
 			if (this.multiPolyline) {
 				this.map.removeLayer(this.multiPolyline);
 			}
-			this.multiPolyline = L.multiPolyline(
-				track.sparseMultiPolyline,
-				{color: '#0073E5', opacity: 0.8}
-			);
+			this.multiPolyline = L.multiPolyline(multiPolyline, {color: '#0073E5', opacity: 0.8});
 			this.multiPolyline.addTo(this.map);
-			this.map.fitBounds(track.latLngBounds);
+			this.map.fitBounds(this.multiPolyline.getLatLngs());
 		},
 
 		onBeforeClose: function() {

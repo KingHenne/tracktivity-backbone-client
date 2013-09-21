@@ -127,7 +127,10 @@ module.exports = function (grunt) {
 			all: {
 				options: {
 					run: false,
-					urls: ['http://localhost:<%= connect.options.port %>/index.html']
+					urls: ['http://localhost:<%= connect.options.port %>/index.html'],
+					ui: 'bdd',
+					reporter: 'Spec',
+					timeout: 5000
 				}
 			}
 		},
