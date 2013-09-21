@@ -2,12 +2,15 @@
 
 define([
 	'backbone.marionette',
-	'templates'
-], function (Marionette, JST) {
+	'hbs!template/activity_list_item'
+], function (Marionette, tmplListItem) {
 	'use strict';
 
 	var ActivityItemView = Marionette.ItemView.extend({
-		template: JST['app/scripts/templates/activity_list_item.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplListItem
+		},
 		
 		events: {
 			'click a': 'clicked'

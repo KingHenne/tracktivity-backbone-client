@@ -51,14 +51,9 @@ module.exports = function (grunt) {
 					'<%= yeoman.app %>/*.html',
 					'.tmp/styles/{,*/}*.css',
 					'{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+					'{.tmp,<%= yeoman.app %>}/scripts/template/*.hbs',
 					'<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
 				]
-			},
-			handlebars: {
-				files: [
-					'<%= yeoman.app %>/scripts/{,*/}*.hbs'
-				],
-				tasks: ['handlebars']
 			}
 		},
 		connect: {
@@ -164,7 +159,7 @@ module.exports = function (grunt) {
 				imagesDir: '<%= yeoman.app %>/images',
 				javascriptsDir: '<%= yeoman.app %>/scripts',
 				fontsDir: '<%= yeoman.app %>/styles/fonts',
-				importPath: '<%= yeoman.app %>/bower_components',
+				importPath: ['<%= yeoman.app %>/bower_components', '<%= yeoman.app %>/styles'],
 				httpImagesPath: '/images',
 				httpGeneratedImagesPath: '/images/generated',
 				httpFontsPath: '/styles/fonts',
@@ -206,9 +201,7 @@ module.exports = function (grunt) {
 					// `name` and `out` is set by grunt-usemin
 					baseUrl: yeomanConfig.app + '/scripts',
 					optimize: 'none',
-					paths: {
-						'templates': '../../.tmp/scripts/templates'
-					},
+					mainConfigFile: yeomanConfig.app + '/scripts/main.js',
 					// TODO: Figure out how to make sourcemaps work with grunt-usemin
 					// https://github.com/yeoman/grunt-usemin/issues/30
 					//generateSourceMaps: true,
@@ -363,22 +356,7 @@ module.exports = function (grunt) {
 			all: {
 				rjsConfig: '<%= yeoman.app %>/scripts/main.js'
 			}
-		},
-		handlebars: {
-			compile: {
-				options: {
-					namespace: 'JST',
-					amd: true
-				},
-				files: {
-					'.tmp/scripts/templates.js': '<%= yeoman.app %>/scripts/templates/*.hbs'
-				}
-			}
 		}
-	});
-
-	grunt.registerTask('createDefaultTemplate', function () {
-		grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
 	});
 
 	grunt.registerTask('server', function (target) {
@@ -388,8 +366,6 @@ module.exports = function (grunt) {
 
 		grunt.task.run([
 			'clean:server',
-			'createDefaultTemplate',
-			'handlebars',
 			'concurrent:server',
 			'autoprefixer',
 			'connect:livereload',
@@ -400,8 +376,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('test', [
 		'clean:server',
-		'createDefaultTemplate',
-		'handlebars',
 		'concurrent:test',
 		'autoprefixer',
 		'connect:test',
@@ -410,8 +384,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('build', [
 		'clean:dist',
-		'createDefaultTemplate',
-		'handlebars',
 		'useminPrepare',
 		'concurrent:dist',
 		'autoprefixer',

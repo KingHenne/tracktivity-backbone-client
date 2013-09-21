@@ -3,14 +3,16 @@
 define([
 	'jquery',
 	'underscore',
+	'backbone',
 	'backbone.marionette',
 	'controllers/user_list_controller',
 	'controllers/user_show_controller',
 	'controllers/activity_controller',
 	'views/main_layout',
 	'utils/dispatcher',
-	'templates'
-], function ($, _, Marionette, UserListController, UserShowController, ActivityController, Layout, Dispatcher, JST) {
+	'hbs!template/home_content',
+	'hbs!template/error'
+], function ($, _, Backbone, Marionette, UserListController, UserShowController, ActivityController, Layout, Dispatcher, tmplHomeContent, tmplError) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -36,7 +38,10 @@ define([
 		getHomeView: function() {
 			if (!this._homeView) {
 				this._homeView = new Marionette.ItemView({
-					template: JST['app/scripts/templates/home_content.hbs']
+					template: {
+						type: 'handlebars',
+						template: tmplHomeContent
+					}
 				});
 			}
 			return this._homeView;
@@ -44,7 +49,10 @@ define([
 
 		getErrorView: function(error) {
 			return new Marionette.ItemView({
-				template: JST['app/scripts/templates/error.hbs'],
+				template: {
+					type: 'handlebars',
+					template: tmplError
+				},
 				className: 'alert alert-danger',
 				model: new Backbone.Model({error: error})
 			});
@@ -126,7 +134,7 @@ define([
 		},
 
 		_showUserActivity: function(user, activity) {
-			if (typeof activity == 'string') {
+			if (typeof activity === 'string') {
 				activity = this.userShowController.getUserActivity(activity);
 			}
 			this._showActivity(activity, this.userShowController.getLayout(user).activity);

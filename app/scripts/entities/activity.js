@@ -2,13 +2,14 @@
 
 define([
 	'underscore',
+	'jquery',
 	'backbone',
-], function (_, Backbone) {
+], function (_, $, Backbone) {
 	'use strict';
 
 	var Activity = Backbone.Model.extend({
 		url: function() {
-			return '/api/activities/' + this.get('id')
+			return '/api/activities/' + this.get('id');
 		},
 
 		getTrack: function() {

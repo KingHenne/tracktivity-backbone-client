@@ -2,12 +2,15 @@
 
 define([
 	'backbone.marionette',
-	'templates'
-], function (Marionette, JST) {
+	'hbs!template/main'
+], function (Marionette, tmplLayout) {
 	'use strict';
 
 	var Layout = Marionette.Layout.extend({
-		template: JST['app/scripts/templates/main.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplLayout
+		},
 		className: 'row',
 
 		regions: {

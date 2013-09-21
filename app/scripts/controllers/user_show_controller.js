@@ -4,10 +4,8 @@ define([
 	'jquery',
 	'underscore',
 	'backbone.marionette',
-	'views/user_show_layout',
-	'entities/user',
-	'entities/activities'
-], function ($, _, Marionette, UserShowLayout, User, Activities) {
+	'views/user_show_layout'
+], function ($, _, Marionette, UserShowLayout) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -17,7 +15,7 @@ define([
 		},
 
 		isUserRendered: function(user) {
-			var username = (typeof user == 'string') ? user : user.get('username');
+			var username = (typeof user === 'string') ? user : user.get('username');
 			return !!this.layout && this.layout.model.get('username') === username;
 		},
 
@@ -33,7 +31,7 @@ define([
 			return this.layout;
 		},
 
-		resetLayout: function(layout) {
+		resetLayout: function() {
 			if (this.layout.isClosed) {
 				this.layout = null;
 			}

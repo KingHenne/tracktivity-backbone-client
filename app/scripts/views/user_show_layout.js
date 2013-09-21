@@ -2,25 +2,36 @@
 
 define([
 	'backbone.marionette',
-	'templates',
 	'views/activity_item_view',
-	'utils/dispatcher'
-], function (Marionette, JST, ActivityItemView, Dispatcher) {
+	'utils/dispatcher',
+	'hbs!template/no_activity_items',
+	'hbs!template/user_details',
+	'hbs!template/user_show'
+], function (Marionette, ActivityItemView, Dispatcher, tmplNoActivities, tmplDetails, tmplLayout) {
 	'use strict';
 
 	var NoActivitiesView = Marionette.ItemView.extend({
-		template: JST['app/scripts/templates/no_activity_items.hbs']
+		template: {
+			type: 'handlebars',
+			template: tmplNoActivities
+		}
 	});
 
 	var UserView = Marionette.CompositeView.extend({
-		template: JST['app/scripts/templates/user_details.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplDetails
+		},
 		emptyView: NoActivitiesView,
 		itemView: ActivityItemView,
 		itemViewContainer: '.activities'
 	});
 
 	var Layout = Marionette.Layout.extend({
-		template: JST['app/scripts/templates/user_show.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplLayout
+		},
 		className: 'row',
 
 		regions: {

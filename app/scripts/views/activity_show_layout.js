@@ -2,13 +2,17 @@
 
 define([
 	'backbone.marionette',
-	'templates',
+	'hbs!template/activity_details',
+	'hbs!template/activity_show',
 	'leaflet'
-], function (Marionette, JST, Leaflet) {
+], function (Marionette, tmplDetails, tmplLayout, L) {
 	'use strict';
 
 	var DetailView = Marionette.ItemView.extend({
-		template: JST['app/scripts/templates/activity_details.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplDetails
+		},
 		modelEvents: {
 			'change': 'render'
 		}
@@ -17,8 +21,8 @@ define([
 	var MapView = Marionette.ItemView.extend({
 		render: function() {
 			this.isClosed = false;
-			this.map = Leaflet.map(this.el);
-			Leaflet.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+			this.map = L.map(this.el);
+			L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
 				key: '6eac6d67cf3f4fa8a18bbf5bec747cdc',
 				styleId: 70963,
 			    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
@@ -35,7 +39,7 @@ define([
 			if (this.multiPolyline) {
 				this.map.removeLayer(this.multiPolyline);
 			}
-			this.multiPolyline = Leaflet.multiPolyline(
+			this.multiPolyline = L.multiPolyline(
 				track.sparseMultiPolyline,
 				{color: '#0073E5', opacity: 0.8}
 			);
@@ -49,7 +53,11 @@ define([
 	});
 
 	var Layout = Marionette.Layout.extend({
-		template: JST['app/scripts/templates/activity_show.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplLayout
+		},
+
 		regions: {
 			details: '.details',
 			map: '.map'
@@ -66,10 +74,6 @@ define([
 				this.map.show(this.mapView);
 			}
 			this.details.show(new DetailView({model: activity}));
-		},
-
-		onClose: function() {
-			
 		}
 	});
 

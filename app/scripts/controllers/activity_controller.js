@@ -20,7 +20,7 @@ define([
 			return this.layout;
 		},
 
-		resetLayout: function(layout) {
+		resetLayout: function() {
 			if (this.layout.isClosed) {
 				this.layout = null;
 			}

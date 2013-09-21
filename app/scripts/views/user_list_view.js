@@ -2,13 +2,17 @@
 
 define([
 	'backbone.marionette',
-	'templates'
-], function (Marionette, JST) {
+	'hbs!template/user_list_item',
+	'hbs!template/user_list'
+], function (Marionette, tmplListItem, tmplList) {
 	'use strict';
 
 	var UserItemView = Marionette.ItemView.extend({
 		tagName: 'li',
-		template: JST['app/scripts/templates/user_list_item.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplListItem
+		},
 		
 		events: {
 			'click a': 'clicked'
@@ -29,7 +33,10 @@ define([
 	});
 
 	var UserListView = Marionette.CompositeView.extend({
-		template: JST['app/scripts/templates/user_list.hbs'],
+		template: {
+			type: 'handlebars',
+			template: tmplList
+		},
 		itemView: UserItemView,
 		itemViewContainer: 'ul.nav',
 		className: 'sidebar',

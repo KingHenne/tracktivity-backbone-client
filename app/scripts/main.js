@@ -6,10 +6,14 @@ require.config({
 		jquery: '../bower_components/jquery/jquery',
 		underscore: '../bower_components/underscore/underscore',
 		backbone: '../bower_components/backbone/backbone',
+		handlebars: '../bower_components/require-handlebars-plugin/Handlebars',
+		hbs: '../bower_components/require-handlebars-plugin/hbs',
+		i18nprecompile: '../bower_components/require-handlebars-plugin/hbs/i18nprecompile',
+		json2: '../bower_components/require-handlebars-plugin/hbs/json2',
 		'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
-		'backbone.wreqr' : '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
-		'backbone.babysitter' : '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
-		handlebars: '../bower_components/handlebars/handlebars.runtime',
+		'backbone.wreqr': '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
+		'backbone.babysitter': '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
+		'backbone.marionette.handlebars': '../bower_components/backbone.marionette.handlebars/backbone.marionette.handlebars',
 		bootstrap: '../bower_components/sass-bootstrap/js',
 		moment: '../bower_components/momentjs/moment',
 		leaflet: '../bower_components/leaflet/dist/leaflet'
@@ -34,32 +38,25 @@ require.config({
 		'bootstrap/transition': {
 			deps: ['jquery']
 		},
-		handlebars: {
-			exports: 'Handlebars'
+		leaflet: {
+			exports: 'L'
 		}
+	},
+	deps: [
+		'backbone.marionette.handlebars'
+	],
+	hbs: {
+		disableI18n: true
 	}
 });
 
 require([
 	'app',
-	'handlebars',
-	'moment',
 	'bootstrap/dropdown',
 	'bootstrap/collapse',
 	'bootstrap/transition'
-], function (App, Handlebars, moment) {
+], function (App) {
 
 	App.start();
 
-	// usage example: {{dateFormat creation_date format='MMMM YYYY'}}
-	// 'format' is optional and defaults to 'MMM DD, YYYY hh:mm A'
-	Handlebars.registerHelper('dateFormat', function(context, block) {
-		var f = block.hash.format || 'MMM DD, YYYY hh:mm A';
-		return moment(context).format(f);
-	});
-
-	// ouputs a relative date
-	Handlebars.registerHelper('dateFromNow', function(context) {
-		return moment(context).fromNow();
-	});
 });
