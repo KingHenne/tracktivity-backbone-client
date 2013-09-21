@@ -25,7 +25,7 @@ define([
 
 		regions: {
 			user: '.user',
-			map: '.map'
+			activity: '.activity'
 		},
 
 		initialize: function(options) {

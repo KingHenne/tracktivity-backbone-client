@@ -1,0 +1,10 @@
+{{#if created}}
+	<h3>
+		{{#if name}}
+			{{name}}
+		{{else}}
+			Activity {{id}}
+		{{/if}}
+	</h3>
+	<p class="text-muted">{{dateFormat created}}</p>
+{{/if}}

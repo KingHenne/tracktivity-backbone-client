@@ -17,24 +17,39 @@ define([
 		},
 
 		isUserRendered: function(user) {
-			return !!this.layout && !this.layout.isClosed && this.layout.model === user;
+			var username = (typeof user == 'string') ? user : user.get('username');
+			return !!this.layout && this.layout.model.get('username') === username;
 		},
 
 		getLayout: function(user) {
-			if (this.user !== user) {
+			if (!this.isUserRendered(user)) {
 				this.layout = new UserShowLayout({
 					model: user,
 					collection: user.activities
 				});
+				this.listenToOnce(this.layout, 'close', this.resetLayout);
 				this.user = user;
 			}
 			return this.layout;
 		},
 
+		resetLayout: function(layout) {
+			if (this.layout.isClosed) {
+				this.layout = null;
+			}
+		},
+
 		showUser: function(user) {
 			this.region.show(this.getLayout(user));
 			// always re-fetch activities to get the latest list
-			user.activities.fetch();
+			return user.activities.fetch();
+		},
+
+		getUserActivity: function(activityId) {
+			if (!this.user || !this.user.activities) {
+				return activityId;
+			}
+			return this.user.activities.get(activityId);
 		}
 	});
 

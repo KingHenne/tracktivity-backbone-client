@@ -44,8 +44,9 @@ body {
 	}
 }
 
-.activity-map {
+.leaflet-container {
 	height: 400px;
+	display: none;
 }
 
 @-webkit-keyframes spinnerRotate {

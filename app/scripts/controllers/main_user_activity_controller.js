@@ -82,7 +82,7 @@ define([
 			return deferred.promise();
 		},
 
-		_showUser: function(user) {
+		_showUser: function(user, deferred) {
 			// 'user' can also be a username (i.e. a string),
 			// so we overwrite it here with the User entity.
 			user = this.userListController.selectUser(user);
@@ -92,16 +92,17 @@ define([
 					user: user
 				});
 			}
-			this.userShowController.showUser(user);
-			return user;
+			this.userShowController.showUser(user).done(function() {
+				deferred.resolve(user);
+			});
 		},
 		showUser: function(user) {
 			var deferred = $.Deferred();
 			if (this.isUserListRendered()) {
-				deferred.resolve(this._showUser(user));
+				this._showUser(user, deferred);
 			} else {
 				this.listUsers(true).done(_.bind(function() {
-					deferred.resolve(this._showUser(user));
+					this._showUser(user, deferred);
 				}, this));
 			}
 			return deferred.promise();
@@ -111,8 +112,8 @@ define([
 			if (!this.activityController) {
 				this.activityController = new ActivityController();
 			}
-			this.activityController.region = !!region ? region : this.layout.contentRegion;
-			this.activityController.showActivity(activity);
+			region = !!region ? region : this.layout.contentRegion;
+			this.activityController.showActivity(region, activity);
 		},
 		showActivity: function(activity) {
 			if (this.isUserListRendered()) {
@@ -123,12 +124,19 @@ define([
 				}, this));
 			}
 		},
+
+		_showUserActivity: function(user, activity) {
+			if (typeof activity == 'string') {
+				activity = this.userShowController.getUserActivity(activity);
+			}
+			this._showActivity(activity, this.userShowController.getLayout(user).activity);
+		},
 		showUserActivity: function(user, activity) {
 			if (this.isUserRendered(user)) {
-				this._showActivity(activity, this.userShowController.getLayout(user).map);
+				this._showUserActivity(user, activity);
 			} else {
 				this.showUser(user).done(_.bind(function(user) {
-					this._showActivity(activity, this.userShowController.getLayout(user).map);
+					this._showUserActivity(user, activity);
 				}, this));
 			}
 		}

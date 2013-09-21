@@ -5,29 +5,40 @@ define([
 	'underscore',
 	'backbone.marionette',
 	'entities/Activity',
-	'views/activity_show_view'
-], function ($, _, Marionette, Activity, ActivityView) {
+	'views/activity_show_layout'
+], function ($, _, Marionette, Activity, ActivityLayout) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
-		initialize: function(options) {
-			this.region = options.region;
+		getLayout: function(region) {
+			if (!this.layout) {
+				this.layout = new ActivityLayout({
+					region: region
+				});
+				this.listenToOnce(this.layout, 'close', this.resetLayout);
+			}
+			return this.layout;
 		},
 
-		showActivity: function(activity) {
+		resetLayout: function(layout) {
+			if (this.layout.isClosed) {
+				this.layout = null;
+			}
+		},
+
+		showActivity: function(region, activity) {
 			if (typeof activity === 'string') {
 				activity = new Activity({ id: activity });
 			}
-			if (this.view) {
-				this.view.model = activity;
+			var layout = this.getLayout(region);
+			layout.showActivity(activity);
+			var track = activity.get('track');
+			if (track) {
+				layout.mapView.showTrack(track);
 			} else {
-				this.view = new ActivityView({ model: activity });
-			}
-			if (this.region.currentView === this.view) {
-				activity.getTrack().then(_.bind(this.view.showTrack, this.view));
-			} else {
-				this.region.show(this.view);
-				activity.fetch();
+				activity.fetch().done(function() {
+					layout.mapView.showTrack(activity.get('track'));
+				});
 			}
 		}
 	});
