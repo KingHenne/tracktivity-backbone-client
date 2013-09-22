@@ -9,10 +9,10 @@ define([
 	'controllers/user_show_controller',
 	'controllers/activity_controller',
 	'views/main_layout',
+	'views/error_view',
 	'utils/dispatcher',
-	'hbs!template/home_content',
-	'hbs!template/error'
-], function ($, _, Backbone, Marionette, UserListController, UserShowController, ActivityController, Layout, Dispatcher, tmplHomeContent, tmplError) {
+	'hbs!template/home_content'
+], function ($, _, Backbone, Marionette, UserListController, UserShowController, ActivityController, Layout, ErrorView, Dispatcher, tmplHomeContent) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({
@@ -47,17 +47,6 @@ define([
 			return this._homeView;
 		},
 
-		getErrorView: function(error) {
-			return new Marionette.ItemView({
-				template: {
-					type: 'handlebars',
-					template: tmplError
-				},
-				className: 'alert alert-danger',
-				model: new Backbone.Model({error: error})
-			});
-		},
-
 		listUsers: function(skipHomeContent) {
 			var deferred = $.Deferred();
 			if (!this.userListController) {
@@ -76,7 +65,7 @@ define([
 					}, this))
 					.fail(_.bind(function(error) {
 						this.layout.contentRegion.show(this.getHomeView());
-						this.layout.asideRegion.show(this.getErrorView(error));
+						this.layout.asideRegion.show(new ErrorView(error));
 					}, this));
 			} else if (!this.userListController.isRendered()) {
 				this.userListController.listUsers();
