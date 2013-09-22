@@ -6,8 +6,9 @@ define([
 	'backbone.marionette',
 	'entities/users',
 	'controllers/main_user_activity_controller',
+	'controllers/live_controller',
 	'utils/dispatcher'
-], function ($, Backbone, Marionette, Users, UserActivityController, Dispatcher) {
+], function ($, Backbone, Marionette, Users, UserActivityController, LiveController, Dispatcher) {
 	'use strict';
 
 	var AppRouter = Backbone.Marionette.AppRouter.extend({
@@ -15,7 +16,8 @@ define([
 			'': 'listUsers',
 			'users/:username': 'showUser',
 			'activities/:activityId': 'showActivity',
-			'users/:username/activities/:activityId': 'showUserActivity'
+			'users/:username/activities/:activityId': 'showUserActivity',
+			'live': 'showLiveTracking'
 		},
 	});
 
@@ -27,6 +29,7 @@ define([
 	});
 
 	var userActivityController = new UserActivityController(App.mainRegion);
+	var liveController = new LiveController(App.mainRegion);
 
 	var API = {
 		listUsers: function() {
@@ -42,6 +45,9 @@ define([
 		},
 		showUserActivity: function(user, activity) {
 			userActivityController.showUserActivity(user, activity);
+		},
+		showLiveTracking: function() {
+			liveController.showLiveTracking();
 		}
 	};
 
