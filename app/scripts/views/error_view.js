@@ -13,8 +13,8 @@ define([
 		},
 		className: 'alert alert-danger',
 
-		initialize: function(error) {
-			this.model = new Backbone.Model({error: error});
+		initialize: function(options) {
+			this.model = new Backbone.Model({error: options.error});
 		}
 	});
 

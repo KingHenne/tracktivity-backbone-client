@@ -65,7 +65,7 @@ define([
 					}, this))
 					.fail(_.bind(function(error) {
 						this.layout.contentRegion.show(this.getHomeView());
-						this.layout.asideRegion.show(new ErrorView(error));
+						this.layout.asideRegion.show(new ErrorView({error: error}));
 					}, this));
 			} else if (!this.userListController.isRendered()) {
 				this.userListController.listUsers();

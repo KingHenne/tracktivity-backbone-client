@@ -29,7 +29,7 @@ define([
 			} else if ('MozWebSocket' in window) {
 				this.socket = new MozWebSocket(host);
 			} else {
-				this.layout.contentRegion.show(new ErrorView('WebSocket is not supported by this browser.'));
+				this.layout.contentRegion.show(new ErrorView({error:'WebSocket is not supported by this browser.'}));
 				return;
 			}
 			this.socket.onopen = this.onSocketOpen;
