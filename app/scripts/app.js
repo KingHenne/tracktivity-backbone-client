@@ -5,10 +5,11 @@ define([
 	'backbone',
 	'backbone.marionette',
 	'entities/users',
+	'controllers/navigation_controller',
 	'controllers/main_user_activity_controller',
 	'controllers/live_controller',
 	'utils/dispatcher'
-], function ($, Backbone, Marionette, Users, UserActivityController, LiveController, Dispatcher) {
+], function ($, Backbone, Marionette, Users, NavigationController, UserActivityController, LiveController, Dispatcher) {
 	'use strict';
 
 	var AppRouter = Backbone.Marionette.AppRouter.extend({
@@ -80,6 +81,7 @@ define([
 	});
 
 	App.addInitializer(function() {
+		var navController = new NavigationController(this.headRegion);
 		new AppRouter({controller: API});
 		Backbone.history.start({pushState: true});
 	});
