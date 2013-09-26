@@ -5,21 +5,12 @@ define([
 	'backbone',
 	'backbone.marionette',
 	'entities/users',
+	'controllers/navigation_controller',
 	'controllers/main_user_activity_controller',
 	'controllers/live_controller',
 	'utils/dispatcher'
-], function ($, Backbone, Marionette, Users, UserActivityController, LiveController, Dispatcher) {
+], function ($, Backbone, Marionette, Users, NavigationController, UserActivityController, LiveController, Dispatcher) {
 	'use strict';
-
-	var AppRouter = Backbone.Marionette.AppRouter.extend({
-		appRoutes: {
-			'': 'listUsers',
-			'users/:username': 'showUser',
-			'activities/:activityId': 'showActivity',
-			'users/:username/activities/:activityId': 'showUserActivity',
-			'live': 'showLiveTracking'
-		},
-	});
 
 	var App = new Marionette.Application();
 
@@ -28,10 +19,32 @@ define([
 		mainRegion: '#main-region'
 	});
 
+	var AppRouter = Backbone.Marionette.AppRouter.extend({
+		appRoutes: {
+			'': 'listUsers',
+			'users/:username': 'showUser',
+			'activities/:activityId': 'showActivity',
+			'users/:username/activities/:activityId': 'showUserActivity',
+			'live': 'showLiveTracking',
+			'about': 'showAbout'
+		},
+	});
+
 	var userActivityController = new UserActivityController(App.mainRegion);
 	var liveController = new LiveController(App.mainRegion);
 
-	var API = {
+	// helpers for array-like objects, e. g. arguments
+	var array = [];
+	var slice = array.slice;
+
+	var routes = {
+		execute: function(route) {
+			this[route].apply(this, slice.call(arguments, 1));
+			this.onRouteEvent.apply(this, arguments);
+		},
+		onRouteEvent: function(route) {
+			Dispatcher.trigger('route', route);
+		},
 		listUsers: function() {
 			userActivityController.listUsers();
 		},
@@ -48,22 +61,28 @@ define([
 		},
 		showLiveTracking: function() {
 			liveController.showLiveTracking();
+		},
+		showAbout: function() {
+			console.warn('The "about" view has not been implemented yet.');
 		}
 	};
+	
+	App.router = new AppRouter({controller: routes});
+	App.router.on('route', routes.onRouteEvent);
 
 	Dispatcher.on('show:user', function(user) {
-		Backbone.history.navigate('users/' + user.get('username'));
-		API.showUser(user);
+		App.router.navigate('users/' + user.get('username'));
+		routes.execute('showUser', user);
 	});
 
 	Dispatcher.on('show:activity', function(activity) {
-		Backbone.history.navigate('activities/' + activity.get('id'));
-		API.showActivity(activity);
+		App.router.navigate('activities/' + activity.get('id'));
+		routes.execute('showActivity', activity);
 	});
 
 	Dispatcher.on('show:user:activity', function(user, activity) {
-		Backbone.history.navigate('users/' + user.get('username') + '/activities/' + activity.get('id'));
-		API.showUserActivity(user, activity);
+		App.router.navigate('users/' + user.get('username') + '/activities/' + activity.get('id'));
+		routes.execute('showUserActivity', user, activity);
 	});
 
 	Dispatcher.setHandler('user:entities', function() {
@@ -80,7 +99,7 @@ define([
 	});
 
 	App.addInitializer(function() {
-		new AppRouter({controller: API});
+		new NavigationController(this.headRegion);
 		Backbone.history.start({pushState: true});
 	});
 
