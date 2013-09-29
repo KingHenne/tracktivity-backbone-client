@@ -1,10 +1,11 @@
-/*global define*/
+/*global define, MozWebSocket*/
 
 define([
+	'underscore',
 	'backbone.marionette',
 	'views/live_layout',
 	'views/error_view'
-], function (Marionette, Layout, ErrorView) {
+], function (_, Marionette, Layout, ErrorView) {
 	'use strict';
 
 	var Controller = Marionette.Controller.extend({

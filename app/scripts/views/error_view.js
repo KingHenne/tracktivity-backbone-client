@@ -1,9 +1,10 @@
 /*global define*/
 
 define([
+	'backbone',
 	'backbone.marionette',
 	'hbs!template/error'
-], function (Marionette, tmplError) {
+], function (Backbone, Marionette, tmplError) {
 	'use strict';
 
 	var View = Marionette.ItemView.extend({
