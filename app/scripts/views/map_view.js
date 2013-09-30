@@ -9,6 +9,10 @@ define([
 	'use strict';
 
 	var View = Marionette.ItemView.extend({
+		initialize: function() {
+			this.userMarkers = {};
+		},
+
 		render: function() {
 			this.isClosed = false;
 			this.map = L.map(this.el);
@@ -22,16 +26,43 @@ define([
 			return this;
 		},
 
-		showMultiPolyline: function(multiPolyline) {
+		_showMap: function() {
 			if (this.$el.is(':hidden')) {
 				this.$el.fadeIn();
 			}
+		},
+
+		showMultiPolyline: function(multiPolyline) {
+			this._showMap();
 			if (this.multiPolyline) {
 				this.map.removeLayer(this.multiPolyline);
 			}
 			this.multiPolyline = L.multiPolyline(multiPolyline, {color: '#0073E5', opacity: 0.8});
 			this.multiPolyline.addTo(this.map);
 			this.map.fitBounds(this.multiPolyline.getLatLngs());
+		},
+
+		showUserLocation: function(username, point) {
+			this._showMap();
+			var latlng = new L.LatLng(point.lat, point.lon);
+			var marker = this.userMarkers[username];
+			if (marker) {
+				marker.setLatLng(latlng);
+			} else {
+				marker = L.marker(latlng);
+				marker.addTo(this.map);
+				this.userMarkers[username] = marker;
+			}
+			// TODO: only pan/zoom if the user hasn't panned/zoomed
+			this.map.setView(latlng, 16);
+		},
+
+		deleteUserLocation: function(username) {
+			var marker = this.userMarkers[username];
+			if (marker) {
+				this.map.removeLayer(marker);
+				delete this.userMarkers[username];
+			}
 		},
 
 		onBeforeClose: function() {
