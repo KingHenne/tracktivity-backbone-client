@@ -2,8 +2,9 @@
 
 define([
 	'backbone.marionette',
+	'views/map_view',
 	'hbs!template/live'
-], function (Marionette, tmplLayout) {
+], function (Marionette, MapView, tmplLayout) {
 	'use strict';
 
 	var Layout = Marionette.Layout.extend({
@@ -15,6 +16,14 @@ define([
 
 		regions: {
 			contentRegion: '#content-region'
+		},
+
+		initialize: function() {
+			this.mapView = new MapView();
+		},
+
+		onShow: function() {
+			this.contentRegion.show(this.mapView);
 		}
 	});
 
