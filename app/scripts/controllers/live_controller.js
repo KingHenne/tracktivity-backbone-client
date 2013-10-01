@@ -50,7 +50,6 @@ define([
 
 		onSocketMessage: function(message) {
 			var data = JSON.parse(message.data);
-			console.log(data['event']);
 			if (data['event'] === 'STARTED') {
 				console.log('User ' + data.username + ' started an activity.');
 			} else if (data['event'] === 'RECORDING') {
