@@ -30,7 +30,9 @@ define([
 			} else if ('MozWebSocket' in window) {
 				this.socket = new MozWebSocket(host);
 			} else {
-				this.layout.contentRegion.show(new ErrorView({error:'WebSocket is not supported by this browser.'}));
+				this.layout.contentRegion.show(new ErrorView({
+					error: 'WebSocket is not supported by this browser.'
+				}));
 				return;
 			}
 			this.socket.onopen = this.onSocketOpen;
@@ -47,7 +49,17 @@ define([
 		},
 
 		onSocketMessage: function(message) {
-			console.log('WebSocket received a message:', message.data);
+			var data = JSON.parse(message.data);
+			if (data.event === 'STARTED') {
+				console.log('User ' + data.username + ' started an activity.');
+			} else if (data.event === 'RECORDING') {
+				this.layout.mapView.showUserLocation(data.username, data.point);
+			} else if (data.event === 'PAUSED') {
+				console.log('User ' + data.username + ' paused his activity.');
+			} else if (data.event === 'FINISHED') {
+				console.log('User ' + data.username + ' finished his activity.');
+				this.layout.mapView.deleteUserLocation(data.username);
+			}
 		}
 	});
 
