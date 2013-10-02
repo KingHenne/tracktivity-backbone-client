@@ -4,9 +4,8 @@ define([
 	'backbone.marionette',
 	'views/map_view',
 	'hbs!template/activity_details',
-	'hbs!template/activity_show',
-	'leaflet'
-], function (Marionette, MapView, tmplDetails, tmplLayout, L) {
+	'hbs!template/activity_show'
+], function (Marionette, MapView, tmplDetails, tmplLayout) {
 	'use strict';
 
 	var DetailView = Marionette.ItemView.extend({
