@@ -18,7 +18,7 @@ define([
 		showLiveTracking: function() {
 			this.appRegion.show(this.layout);
 			if (window.location.protocol === 'http:') {
-				this.connect('ws://localhost:8080/live');
+				this.connect('ws://' + window.location.host + ':8080/live');
 			} else {
 				this.connect('wss://hendrik:123456@' + window.location.host + '/live');
 			}
